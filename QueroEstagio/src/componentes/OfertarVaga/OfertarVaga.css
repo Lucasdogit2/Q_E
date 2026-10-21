@@ -1,0 +1,253 @@
+/* Escopo isolado da página */
+.ofertar-vaga-root {
+ --fundo: #FFF8F0;
+  --principal: #520b0b;
+  --secundario:#7b0d0d;
+  --acao: #bc0202;;
+  --texto: #333333;
+  --branco: #FFFFFF;
+  --radius: 12px;
+}
+
+/* Reset local agressivo para evitar heranças do index.css */
+.ofertar-vaga-root,
+.ofertar-vaga-root *,
+.ofertar-vaga-root *::before,
+.ofertar-vaga-root *::after {
+  box-sizing: border-box !important;
+  margin: 0;
+  padding: 0;
+}
+
+/* Base da página ocupando a tela toda */
+.login-wrapper.ofertar-vaga-root {
+  min-height: 100vh !important;
+  width: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  background: var(--fundo) !important;
+  font-family: Inter, system-ui, -apple-system, sans-serif !important;
+  color: var(--texto) !important;
+  overflow-x: hidden; /* Evita barra de rolagem horizontal estranha */
+}
+
+/* Topbar */
+.ofertar-vaga-root .topbar {
+  background: var(--principal);
+  color: var(--branco);
+  padding: 14px 20px;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  width: 100% !important;
+}
+
+.ofertar-vaga-root .brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 600;
+  font-size: 1.05rem;
+}
+
+.ofertar-vaga-root .menu-btn {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.12);
+  color: var(--branco);
+  padding: 8px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+/* Área central do formulário */
+.ofertar-vaga-root .container {
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  padding: 40px 20px !important;
+  gap: 20px;
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+/* O Cartão do Formulário */
+.ofertar-vaga-root .form-card {
+  background: linear-gradient(145deg, #ffffff, #f7f0e8) !important;
+  width: 100% !important;
+  max-width: 700px !important;
+  border-radius: var(--radius) !important;
+  box-shadow: 0 12px 25px rgba(94,59,139,0.15) !important;
+  padding: 32px !important;
+}
+
+.ofertar-vaga-root .form-title {
+  width: 100%;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--principal);
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* Grid de campos internos */
+.ofertar-vaga-root .form-grid {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: wrap !important;
+  gap: 16px !important;
+  width: 100% !important;
+}
+
+/* Caixas dos inputs (lado a lado no desktop, empilhadas no mobile) */
+.ofertar-vaga-root .field {
+  background: #FFF !important;
+  padding: 12px 14px !important;
+  border-radius: 14px !important;
+  border: 1px solid #E6E9EB !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 6px !important;
+  transition: all 0.2s;
+  flex: 1 1 calc(50% - 8px) !important; /* Força dividir em 2 colunas perfeitas */
+  min-width: 260px !important; /* Se a tela encolher menos que isso, joga para baixo */
+}
+
+.ofertar-vaga-root .field:hover {
+  box-shadow: 0 6px 14px rgba(94,59,139,0.1);
+  border-color: var(--principal) !important;
+}
+
+.ofertar-vaga-root label {
+  font-size: 0.95rem;
+  color: var(--texto);
+  font-weight: 500;
+}
+
+/* Forçar inputs a respeitarem as caixas contêineras */
+.ofertar-vaga-root input[type=text], 
+.ofertar-vaga-root input[type=number], 
+.ofertar-vaga-root input[type=date] {
+  padding: 10px 12px !important;
+  border-radius: 10px !important;
+  border: 1px solid #E6E9EB !important;
+  font-size: 1rem !important;
+  outline: none !important;
+  background: #FFFFFF !important;
+  width: 100% !important; /* Ocupa exatamente o espaço interno da classe .field */
+}
+
+.ofertar-vaga-root input:focus {
+  box-shadow: 0 4px 10px rgba(94,59,139,0.15);
+  border-color: var(--principal) !important;
+}
+
+/* Seletores de tipo Interno/Externo */
+.ofertar-vaga-root .radio-group {
+  display: flex !important;
+  gap: 16px !important;
+  margin-bottom: 8px !important;
+  justify-content: center !important;
+  width: 100% !important;
+}
+
+.ofertar-vaga-root .radio-group label {
+  background: var(--branco) !important;
+  padding: 10px 24px !important;
+  border-radius: 12px !important;
+  cursor: pointer !important;
+  border: 1px solid #ddd !important;
+  transition: all 0.2s;
+  text-align: center;
+  flex: 1;
+  max-width: 200px;
+}
+
+.ofertar-vaga-root .radio-group input[type=radio] {
+  display: none !important;
+}
+
+.ofertar-vaga-root .radio-group input[type=radio]:checked + label {
+  border-color: var(--principal) !important;
+  background: rgba(94, 59, 139, 0.1) !important;
+  font-weight: 600 !important;
+}
+
+/* Botão de envio */
+.ofertar-vaga-root .btn-submit {
+  margin-top: 10px;
+  padding: 14px 20px !important;
+  border: none !important;
+  border-radius: 16px !important;
+  background: var(--principal) !important;
+  color: var(--branco) !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+  font-size: 1.05rem !important;
+  transition: 0.2s !important;
+  width: 100% !important;
+}
+
+.ofertar-vaga-root .btn-submit:hover {
+  background: var(--acao) !important;
+}
+
+/* Rodapé */
+.ofertar-vaga-root .bottombar {
+  background: var(--principal);
+  color: var(--branco);
+  padding: 16px 20px;
+  text-align: center;
+  font-size: 0.95rem;
+  width: 100% !important;
+}
+
+.ofertar-vaga-root .bottombar small {
+  display: block;
+  color: rgba(255,255,255,0.85);
+  margin-top: 6px;
+  font-size: 0.85rem;
+}
+
+.ofertar-vaga-root .logo-square {
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  background:  var(--secundario);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 700;
+}
+
+/* ==========================================
+   MEDIA QUERIES (Correções para Mobile/Celular)
+   ========================================== */
+@media (max-width: 620px) {
+  .ofertar-vaga-root .container {
+    padding: 20px 12px !important;
+  }
+
+  .ofertar-vaga-root .form-card {
+    padding: 20px 16px !important;
+  }
+
+  .ofertar-vaga-root .form-grid {
+    flex-direction: column !important; /* Força virar uma única coluna */
+  }
+
+  .ofertar-vaga-root .field {
+    flex: 1 1 100% !important; /* Ocupa a largura total da tela no celular */
+    width: 100% !important;
+  }
+  
+  /* Esconde dinamicamente a frase longa do IFAP para evitar que o topo quebre em telas pequenas */
+  .ofertar-vaga-root .brand div div:last-child {
+    display: none !important;
+  }
+}

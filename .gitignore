@@ -1,0 +1,6 @@
+# Esconde as chaves secretas
+.env
+*.env
+
+# Esconde as pastas de dependências (que são muito pesadas)
+node_modules/

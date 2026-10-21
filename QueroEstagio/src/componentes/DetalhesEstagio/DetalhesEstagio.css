@@ -1,0 +1,156 @@
+
+:root {
+  --azul-petroleo: #002480;
+  --azul-logo: #041d52;
+  --azul-b1: #0031ae;
+  --azul-b2:#026fbc;
+  --cinza-claro: #F5F9FC;
+  --cinza-medio: #667780;
+  --verde-suave: #115c36;
+  --branco: #FFFFFF;
+  --texto-escuro: #1E2A2F;
+  --radius: 12px;
+}
+
+.detalhes-body {
+  font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, Arial;
+  background: var(--cinza-claro);
+  color: var(--texto-escuro);
+  line-height: 1.5;
+  min-height: 100vh;
+}
+
+header {
+  background: var(--azul-petroleo);
+  color: var(--branco);
+  padding: 14px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 600;
+}
+
+.logo-square {
+  width: 40px;
+  height: 40px;
+  background: var (var(--azul-logo));
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  border-radius: 8px;
+  font-weight: 700;
+}
+.menu-btn {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.12);
+  padding: 8px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  color: white;
+}
+
+.menu-panel {
+  position: absolute;
+  top: 64px;
+  right: 20px;
+  background: #fff;
+  border-radius: 10px;
+  padding: 12px;
+  box-shadow: 0 8px 30px rgba(12,22,26,0.12);
+  z-index: 10;
+}
+
+.menu-panel a {
+  display: block;
+  padding: 8px 6px;
+  color: var(--azul-petroleo);
+  text-decoration: none;
+  border-radius: 6px;
+}
+
+.menu-panel a:hover {
+  background: #F3F6F7;
+}
+
+main.detalhes-container {
+  padding: 40px 20px;
+  max-width: 600px;
+  margin: 40px auto;
+  background: white;
+  border-radius: var(--radius);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+}
+
+h2 {
+  color: var(--azul-petroleo);
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+form label {
+  font-weight: 600;
+}
+
+form input, form textarea {
+  padding: 10px 14px;
+  border-radius: var(--radius);
+  border: 1px solid #E6E9EB;
+  font-size: 1rem;
+  background-color: white;
+  color: var(--texto-escuro);
+}
+
+form textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+form button {
+  padding: 12px 20px;
+  background: var(--azul-petroleo);
+  color: white;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+form button:hover {
+  background: #026fbc;
+}
+
+footer {
+  background: var(--azul-petroleo);
+  color: white;
+  text-align: center;
+  padding: 20px;
+  position: relative;
+  margin-top: 40px;
+}
+
+footer small {
+  display: block;
+  color: rgba(255,255,255,0.85);
+  margin-top: 6px;
+  font-size: 0.85rem;
+}
+
+.mascot {
+  position: absolute;
+  bottom: 10px;
+  right: 20px;
+  font-size: 2rem;
+}

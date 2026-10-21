@@ -1,0 +1,416 @@
+/* =========================
+   PALETA
+========================= */
+
+:root {
+  --azul-petroleo: #002480;
+  --azul-logo: #0348dc;
+  --cinza-claro: #737e9a;
+  --fundo: #c9ccfc;
+  --cinza-medio: #667780;
+  --verde-suave: #115c36;
+  --branco: #FFFFFF;
+  --texto-escuro: #1E2A2F;
+  --radius: 12px;
+}
+
+
+/* =========================
+   RESET
+========================= */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+
+/* =========================
+   CORPO
+========================= */
+
+.painel-body {
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+  background: var(--fundo);
+  color: var(--texto-escuro);
+  line-height: 1.5;
+  min-height: 100vh;
+}
+
+
+/* =========================
+   CABEÇALHO
+========================= */
+
+header {
+  background: var(--azul-petroleo);
+  color: var(--branco);
+
+  padding: 14px 20px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  min-height: 74px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 600;
+}
+
+
+/* =========================
+   LOGO
+========================= */
+
+.tela-estudante .logo-square {
+  width: 40px;
+  height: 40px;
+
+  border-radius: 8px;
+
+  background: var(--azul-logo);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: var(--branco);
+  font-weight: 700;
+}
+
+
+/* =========================
+   BOTÃO MENU
+========================= */
+
+.menu-btn {
+  background: transparent;
+
+  border: 1px solid rgba(255, 255, 255, 0.25);
+
+  padding: 9px 13px;
+
+  border-radius: 8px;
+
+  cursor: pointer;
+
+  color: white;
+  font-size: 15px;
+
+  transition: 0.2s;
+}
+
+.menu-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+
+/* =========================
+   MENU ABERTO
+========================= */
+
+.menu-panel {
+  position: absolute;
+
+  top: 64px;
+  right: 20px;
+
+  width: 195px;
+
+  background: #fff;
+
+  border-radius: 10px;
+
+  padding: 12px;
+
+  box-shadow: 0 8px 30px rgba(12, 22, 26, 0.12);
+
+  z-index: 10;
+}
+
+.menu-panel a {
+  display: block;
+
+  padding: 10px 8px;
+
+  color: var(--azul-petroleo);
+
+  text-decoration: none;
+
+  border-radius: 6px;
+
+  transition: 0.2s;
+}
+
+.menu-panel a:hover {
+  background: #F3F6F7;
+}
+
+
+/* =========================
+   SEÇÃO PRINCIPAL
+========================= */
+
+section {
+  padding: 45px 20px;
+
+  max-width: 900px;
+
+  margin: 0 auto;
+}
+
+
+/* =========================
+   VERSÃO 1
+========================= */
+
+.version1 h2 {
+  color: var(--azul-petroleo);
+
+  margin-bottom: 30px;
+
+  text-align: center;
+
+  font-size: 1.8rem;
+}
+
+
+/* =========================
+   CARDS
+========================= */
+
+.version1 .cards {
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  gap: 26px;
+
+  margin-bottom: 45px;
+}
+
+
+/* CARD INDIVIDUAL */
+
+.version1 .card {
+  background: var(--branco);
+
+  width: 100%;
+  max-width: 410px;
+
+  min-height: 220px;
+
+  padding: 32px;
+
+  border-radius: var(--radius);
+
+  text-align: center;
+
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+
+  transition: 0.3s;
+
+  cursor: pointer;
+
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: space-between;
+
+  align-items: center;
+}
+
+
+/* Efeito ao passar o mouse */
+
+.version1 .card:hover {
+  transform: translateY(-4px);
+
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.09);
+}
+
+
+/* ÍCONE DO CARD */
+
+.version1 .card i {
+  font-size: 2rem;
+
+  display: block;
+
+  margin-bottom: 12px;
+
+  color: var(--);
+
+  font-style: normal;
+}
+
+
+/* TÍTULO DO CARD */
+
+.version1 .card h3 {
+  color: var(--azul-petroleo);
+
+  margin-bottom: 12px;
+
+  font-size: 1.25rem;
+}
+
+
+/* TEXTO DO CARD */
+
+.version1 .card p {
+  color: var(--azul-petroleo);
+
+  line-height: 1.6;
+
+  margin-bottom: 20px;
+}
+
+
+/* =========================
+   BOTÃO DOS CARDS
+========================= */
+
+.version1 .card button {
+  width: 100%;
+
+  max-width: 350px;
+
+  padding: 12px 20px;
+
+  border: none;
+
+  border-radius: 10px;
+
+  background: var(--azul-petroleo);
+
+  color: white;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+.version1 .card button:hover {
+  background: #0348dc;
+}
+
+
+/* =========================
+   ÁREA SOBRE
+========================= */
+
+.version1 .about {
+  background: white;
+
+  padding: 35px;
+
+  border-radius: var(--radius);
+
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+
+  max-width: 850px;
+
+  margin: 0 auto;
+}
+
+
+/* =========================
+   LINHA
+========================= */
+
+hr {
+  border: 0;
+
+  height: 1px;
+
+  background: var(--cinza-medio);
+
+  margin: 40px 0;
+
+  opacity: 0.3;
+}
+
+
+/* =========================
+   RODAPÉ
+========================= */
+
+footer {
+  background: var(--azul-petroleo);
+
+  color: white;
+
+  text-align: center;
+
+  padding: 20px;
+
+  position: relative;
+
+  margin-top: 40px;
+}
+
+footer small {
+  display: block;
+
+  color: rgba(255, 255, 255, 0.85);
+
+  margin-top: 6px;
+
+  font-size: 0.85rem;
+}
+
+
+/* =========================
+   MASCOTE
+========================= */
+
+.mascot {
+  position: absolute;
+
+  bottom: 10px;
+
+  right: 20px;
+
+  font-size: 2rem;
+}
+
+
+/* =========================
+   CELULAR
+========================= */
+
+@media (max-width: 600px) {
+
+  header {
+    padding: 12px 15px;
+  }
+
+  section {
+    padding: 30px 15px;
+  }
+
+  .version1 .card {
+    max-width: 100%;
+    padding: 28px 22px;
+  }
+
+  .brand {
+    gap: 8px;
+  }
+
+  .menu-panel {
+    right: 15px;
+  }
+}

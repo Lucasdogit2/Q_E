@@ -1,0 +1,279 @@
+
+.tela-estudante {
+  --principal: #002480;
+  --principal-escuro: #000fb9;
+  --azul-logo: #0b2152;
+  --fundo: #c9ccfc;
+  --acao: #026fbc;
+  --branco: #FFFFFF;
+  --texto-escuro: #24343D;
+  --texto-sub: #667780;
+  --borda: #D9E5EC;
+  --radius: 12px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* PÁGINA */
+.login-wrapper.tela-estudante {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--fundo) !important;
+  font-family: Inter, system-ui, -apple-system, sans-serif;
+  color: var(--texto-escuro);
+}
+
+/* CABEÇALHO */
+.tela-estudante .topbar {
+  background: var(--principal);
+  color: var(--branco);
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.tela-estudante .brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 600;
+  font-size: 1.05rem;
+}
+
+/* BOTÃO MENU */
+.tela-estudante .menu-btn {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: var(--branco);
+  padding: 8px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: 0.2s;
+}
+
+.tela-estudante .menu-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* CONTAINER */
+.tela-estudante .container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+/* CARD */
+.tela-estudante .login-card {
+  background: var(--branco);
+  width: 100%;
+  max-width: 460px;
+  border-radius: var(--radius);
+  box-shadow: 0 10px 30px rgba(18, 54, 77, 0.10);
+  padding: 28px;
+  border: 1px solid var(--borda);
+}
+
+/* TÍTULO */
+.tela-estudante .login-title {
+  color: var(--principal);
+  font-size: 1.25rem;
+  margin-bottom: 12px;
+  font-weight: 700;
+}
+
+/* SUBTÍTULO */
+.tela-estudante .login-sub {
+  color: var(--texto-sub);
+  font-size: 0.95rem;
+  margin-bottom: 18px;
+}
+
+/* CAMPOS */
+.tela-estudante .field {
+  margin-bottom: 12px;
+}
+
+.tela-estudante label {
+  display: block;
+  font-size: 0.9rem;
+  margin-bottom: 6px;
+  color: var(--texto-escuro);
+}
+
+.tela-estudante input[type="text"],
+.tela-estudante input[type="password"] {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--borda);
+  font-size: 1rem;
+  background: var(--branco);
+  color: var(--texto-escuro);
+  outline: none;
+  transition: 0.2s;
+}
+
+.tela-estudante input[type="text"]:focus,
+.tela-estudante input[type="password"]:focus {
+  border-color: var(--azul-claro);
+  box-shadow: 0 4px 12px rgba(91, 155, 194, 0.15);
+}
+
+/* AÇÕES */
+.tela-estudante .actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-top: 12px;
+}
+
+/* BOTÃO PRINCIPAL */
+.tela-estudante .btn-primary {
+  background: var(--principal);
+  color: var(--branco);
+  padding: 10px 16px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.2s;
+}
+
+.tela-estudante .btn-primary:hover {
+  background: var(--acao);
+}
+
+/* LINK */
+.tela-estudante .btn-link {
+  background: transparent;
+  border: none;
+  color: var(--acao);
+  cursor: pointer;
+  text-decoration: underline;
+  font-size: 0.95rem;
+  text-align: left;
+}
+
+.tela-estudante .btn-link:hover {
+  color: #000fb9;
+}
+
+/* OBSERVAÇÃO */
+.tela-estudante .alt-note {
+  font-size: 0.9rem;
+  color: var(--texto-sub);
+  margin-top: 10px;
+}
+
+/* RODAPÉ */
+.tela-estudante .bottombar {
+  background: var(--principal);
+  color: var(--branco);
+  padding: 16px 20px;
+  text-align: center;
+  font-size: 0.95rem;
+}
+
+.tela-estudante .bottombar small {
+  display: block;
+  color: rgba(255, 255, 255, 0.80);
+  margin-top: 6px;
+  font-size: 0.85rem;
+}
+
+/* LOGO */
+.tela-estudante .logo-square {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  background: var(--azul-logo); 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--branco);
+  font-weight: 700;
+}
+
+/* MENU */
+.tela-estudante .menu-panel {
+  position: absolute;
+  top: 64px;
+  right: 20px;
+  background: var(--branco);
+  border-radius: 10px;
+  padding: 12px;
+  box-shadow: 0 8px 30px rgba(18, 54, 77, 0.15);
+  border: 1px solid var(--borda);
+  z-index: 10;
+}
+
+.tela-estudante .menu-panel a {
+  display: block;
+  padding: 8px 6px;
+  color: var(--principal);
+  text-decoration: none;
+  border-radius: 6px;
+  transition: 0.2s;
+}
+
+.tela-estudante .menu-panel a:hover {
+  background: var(--fundo);
+  color: var(--principal-escuro);
+}
+.cadastro-pergunta {
+  text-align: center;
+  margin: 25px 0 10px;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.btn-cadastrar-estudante {
+  width: 100%;
+  padding: 11px;
+  border: 1px solid #0348dc;
+  border-radius: 8px;
+  background: var(--azul-logo);
+  color: #dbdee4;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn-cadastrar-estudante:hover {
+  background:var(--acao);
+  color: white;
+}
+
+.btn-cadastrar-estudante {
+  width: 100%;
+  margin-top: 8px;
+}
+
+
+.btn-voltar-llogin {
+width: 100%;
+  padding: 11px;
+  border: 1px solid #0348dc;
+  border-radius: 8px;
+  background: var(--azul-logo) !important;
+  color: #dbdee4;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn-voltar-llogin:hover {
+  background: var(--acao);
+}

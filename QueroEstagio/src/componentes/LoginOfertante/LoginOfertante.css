@@ -1,0 +1,246 @@
+.tela-ofertante {
+  --principal: #7b0d0d;
+  --principal-escuro: #7b0315;
+  --azul-logo: #520b0b;
+  --fundo: #F5F9FC;
+  --acao: #bc0202;
+  --branco: #FFFFFF;
+  --texto-escuro: #24343D;
+  --texto-sub: #667780;
+  --borda: #D9E5EC;
+  --radius: 12px;
+}
+
+.login-wrapper.tela-ofertante {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--fundo) !important;
+  font-family: Inter, system-ui, -apple-system, sans-serif;
+  color: var(--texto-escuro);
+}
+
+.tela-ofertante .topbar {
+  background: var(--azul-logo);
+  color: var(--branco);
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.tela-ofertante .brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 600;
+  font-size: 1.05rem;
+}
+
+.tela-ofertante .menu-btn {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.12);
+  color: var(--branco);
+  padding: 8px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.tela-ofertante .container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  color: var(--texto-sub) !important;
+}
+
+.tela-ofertante .login-card {
+  background: var(--branco);
+  width: 100%;
+  max-width: 460px;
+  border-radius: var(--radius);
+  box-shadow: 0 15px 35px rgba(162, 13, 13, 0.2);
+  padding: 28px;
+}
+
+.tela-ofertante .login-title {
+  color: var(--azul-logo);
+  font-size: 1.25rem;
+  margin-bottom: 12px;
+  font-weight: 700;
+}
+
+.tela-ofertante .login-sub {
+  color: var(--texto-sub);
+  font-size: 0.95rem;
+  margin-bottom: 18px;
+}
+
+.tela-ofertante .field {
+  margin-bottom: 12px;
+
+}
+
+.tela-ofertante label {
+  display: block;
+  font-size: 0.9rem;
+  margin-bottom: 6px;
+  color: var(--texto-escuro);
+}
+
+.tela-ofertante input[type="text"],
+.tela-ofertante input[type="email"],
+.tela-ofertante input[type="password"]{
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--borda);
+  font-size: 1rem;
+  background: var(--branco);
+  color: var(--texto-escuro);
+  outline: none;
+  transition: 0.2s;
+}
+.tela-ofertante input[type=email]:focus, 
+.tela-ofertante input[type=password]:focus {
+  box-shadow: 0 4px 12px rgba(94, 59, 139, 0.1);
+  border-color: var(--fundo);
+}
+
+.tela-ofertante .actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-top: 12px;
+  color: var(--azul-logo);
+}
+
+.tela-ofertante .btn-primary {
+  background: var(--azul-logo);
+  color: var(--branco);
+  padding: 10px 16px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.tela-ofertante .btn-primary:hover {
+  background: #bc0202;
+}
+
+.tela-ofertante .btn-link {
+  background: transparent;
+  border: none;
+  color: var(--acao);
+  cursor: pointer;
+  text-decoration: underline;
+  font-size: 0.95rem;
+  text-align: left;
+}
+.tela-ofertante .btn-link:hover {
+ color:#520b0b;
+}
+
+
+
+.tela-ofertante .alt-note {
+  font-size: 0.9rem;
+  color: var(--texto-sub);
+  margin-top: 10px;
+}
+
+.tela-ofertante .bottombar {
+  background: var(--azul-logo);
+  color: var(--branco);
+  padding: 16px 20px;
+  text-align: center;
+  font-size: 0.95rem;
+}
+
+.tela-ofertante .bottombar small {
+  display: block;
+  color: rgba(255,255,255,0.85);
+  margin-top: 6px;
+  font-size: 0.85rem;
+  color: #f6f0ff;
+}
+
+.tela-ofertante .logo-square {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  background: var(--principal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 700;
+}
+
+.tela-ofertante .menu-panel {
+  position: absolute;
+  top: 64px;
+  right: 20px;
+  background: #fff;
+  border-radius: 10px;
+  padding: 12px;
+  box-shadow: 0 8px 30px rgba(218, 23, 23, 0.15);
+  z-index: 10;
+}
+
+.tela-ofertante .menu-panel a {
+  display: block;
+  padding: 8px 6px;
+  color: var(--fundo);
+  text-decoration: none;
+  border-radius: 6px;
+}
+
+.cadastro-pergunta {
+  text-align: center;
+  margin: 25px 0 10px;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.btn-cadastrarr {
+  width: 100%;
+  padding: 11px;
+  border: 1px solid #dc0303;
+  border-radius: 8px;
+  background: var(--azul-logo);
+  color: #fff0f0;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn-cadastrarr:hover {
+  background: #dc0303;
+  color: white;
+}
+
+.btn-cadastarr {
+  width: 100%;
+  margin-top: 8px;
+}
+
+.btn-voltarr-login {
+  width: 100%;
+  margin-top: 12px;
+  padding: 10px;
+  border: none;
+  background: transparent;
+  color: #dc0303;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.btn-voltarr-login:hover {
+  background: transparent;
+}
