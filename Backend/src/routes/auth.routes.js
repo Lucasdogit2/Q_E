@@ -7,7 +7,7 @@ const router = Router();
 // Cadastro público apenas para estudantes. Contas staff devem ser provisionadas por um administrador.
 router.post('/register', async (req, res) => {
   const { full_name, email, password, registration, course, academic_year } = req.body || {};
-  if (!full_name?.trim() || !email?.trim() || !password || !registration || !course?.trim() || academic_year === undefined) {
+  if (!full_name?.trim() || !email?.trim() || !password || !registration || !course?.trim() || !Number.isInteger(Number(academic_year)) || Number(academic_year) < 1) {
     return res.status(400).json({ error: 'Preencha nome, e-mail, senha, matrícula, curso e ano/período.' });
   }
   if (password.length < 8) return res.status(400).json({ error: 'A senha deve ter pelo menos 8 caracteres.' });
