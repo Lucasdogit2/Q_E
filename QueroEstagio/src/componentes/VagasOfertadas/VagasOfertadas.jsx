@@ -18,7 +18,7 @@ export default function VagasOfertadas() {
   return <div className="login-wrapper vagas-ofertadas-root">
     <header className="topbar"><div className="brand"><div className="logo-square">Q.E</div><div><div>Q.E. – Quero Estágio</div><div className="ifap-text">Instituto Federal do Amapá — Campus Laranjal do Jari</div></div></div>
       <button type="button" className="menu-btn" onClick={() => setMenuAberto(!menuAberto)}>☰ Menu</button></header>
-    {menuAberto && <nav className="menu-panel"><a href="/painel-ofertante">Painel Principal</a><a href="/ofertar-vaga">Ofertar Nova Vaga</a><a href="/ofertante">Sair</a></nav>}
+    {menuAberto && <nav className="menu-panel"><a href="/painel-ofertante">Painel Principal</a><a href="/ofertar-vaga">Ofertar Nova Vaga</a><a href="/ofertante" onClick={api.logout}>Sair</a></nav>}
     <main className="container"><h1 className="page-title">Seus Estágios Ofertados</h1><p className="page-subtitle">Gerencie as vagas cadastradas por você.</p>
       {loading && <p>Carregando vagas...</p>}{erro && <p role="alert">{erro}</p>}
       {!loading && !erro && vagas.length === 0 && <p>Você ainda não cadastrou vagas.</p>}
