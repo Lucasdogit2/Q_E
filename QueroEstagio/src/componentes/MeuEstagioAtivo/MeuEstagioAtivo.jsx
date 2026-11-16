@@ -1,86 +1,38 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { api } from '../../services/api';
 import './MeuEstagioAtivo.css';
 
 export default function MeuEstagioAtivo() {
   const [menuAberto, setMenuAberto] = useState(false);
+  const [progress, setProgress] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [erro, setErro] = useState('');
   const navigate = useNavigate();
 
-  // Array contendo os detalhes informativos organizados
-  const cardsInfo = [
-    { icon: '📍', texto: 'Laboratório de Informática' },
-    { icon: '👨‍🏫', texto: 'Prof. João Silva' },
-    { icon: '👥', texto: '3 Estagiários' },
-    { icon: '📅', texto: 'Duração: 200h' },
-    { icon: '🕒', texto: 'Seg a Sex, 08:00-12:00' },
-    { icon: '🛠️', texto: 'Programação, Lógica, Git' }
-  ];
+  useEffect(() => {
+    api.myProgress().then(r => setProgress(r.progress || []))
+      .catch(e => setErro(e.message)).finally(() => setLoading(false));
+  }, []);
 
-  return (
-    <div className="estagio-ativo-body">
-      {/* Header */}
-      <header>
-        <div className="brand" onClick={() => navigate('/painel')} style={{ cursor: 'pointer' }}>
-          <div className="logo-square">Q.E</div>
-          <div>
-            <div>Q.E. – Quero Estágio</div>
-            <div style={{ fontSize: '0.78rem', color: 'rgba(255,255,255,0.9)' }}>
-              Instituto Federal do Amapá — Campus Laranjal do Jari
-            </div>
-          </div>
-        </div>
-        <button 
-          className="menu-btn" 
-          onClick={() => setMenuAberto(!menuAberto)}
-          aria-expanded={menuAberto}
-        >
-          ☰ Menu
-        </button>
-      </header>
-
-      {/* Menu lateral condicional */}
-      {menuAberto && (
-        <nav className="menu-panel">
-          <a href="#" onClick={() => { setMenuAberto(false); navigate('/painel'); }}>Painel Inicial</a>
-          <a href="#" onClick={() => { setMenuAberto(false); navigate('/buscar'); }}>Buscar Estágios</a>
-          <a href="#" onClick={() => { setMenuAberto(false); navigate('/meus-estagios'); }}>Meus Estágios</a>
-          <a href="#" onClick={() => navigate('/')}>Sair</a>
-        </nav>
-      )}
-
-      <div className="extra-mascot">🐢</div>
-
-      {/* Conteúdo Principal */}
-      <main className="estagio-ativo-main">
-        <h2>Informações do Estágio</h2>
-
-        <div className="info-grid">
-          {cardsInfo.map((card, index) => (
-            <div className="info-card" key={index}>
-              <span className="icon">{card.icon}</span>
-              <p>{card.texto}</p>
-            </div>
-          ))}
-        </div>
-
-        {/* Bloco de Frequência / Progresso */}
-        <div className="frequencia">
-          <h4>Minha Frequência</h4>
-          <p>Horas Cumpridas: 120h</p>
-          <p>Horas Restantes: 80h</p>
-          <p>Status: Em andamento</p>
-          <div className="frequencia-bar">
-            <div className="frequencia-bar-inner">60%</div>
-          </div>
-        </div>
-      </main>
-
-      {/* Footer */}
-      <footer>
-        Plataforma Q.E. – Quero Estágio | Vinculada ao Instituto Federal do Amapá – Campus Laranjal do Jari
-        <small>©️ 2025 – Todos os direitos reservados</small>
-        <div className="mascot">🐢</div>
-      </footer>
-    </div>
-  );
+  return <div className="estagio-ativo-body">
+    <header><div className="brand" onClick={() => navigate('/painel')} style={{ cursor: 'pointer' }}><div className="logo-square">Q.E</div><div>Q.E. – Quero Estágio<div style={{ fontSize: '0.78rem' }}>Instituto Federal do Amapá — Campus Laranjal do Jari</div></div></div>
+      <button className="menu-btn" onClick={() => setMenuAberto(!menuAberto)}>☰ Menu</button></header>
+    {menuAberto && <nav className="menu-panel"><a href="/painel">Painel Inicial</a><a href="/meus-estagios">Meus Estágios</a><a href="/">Sair</a></nav>}
+    <main className="estagio-ativo-main"><h2>Progresso dos Estágios Aprovados</h2>
+      {loading && <p>Carregando progresso...</p>}{erro && <p role="alert">{erro}</p>}
+      {!loading && !erro && progress.length === 0 && <p>Você ainda não possui estágio aprovado com progresso registrado.</p>}
+      {progress.map(item => {
+        const done = Number(item.completed_hours || 0);
+        const required = Number(item.required_hours || 0);
+        const pct = required > 0 ? Math.min(100, Math.round(done / required * 100)) : 0;
+        return <section className="frequencia" key={item.application_id}>
+          <h3>Estágio #{item.internship_id}</h3>
+          <p>Horas cumpridas: {done}h</p><p>Horas exigidas: {required}h</p><p>Horas restantes: {Math.max(0, required - done)}h</p>
+          <p>Conclusão: {pct}%</p><div className="frequencia-bar"><div className="frequencia-bar-inner" style={{ width: pct + '%' }}>{pct}%</div></div>
+        </section>;
+      })}
+    </main>
+    <footer>Plataforma Q.E. – Quero Estágio | IFAP – Campus Laranjal do Jari</footer>
+  </div>;
 }
