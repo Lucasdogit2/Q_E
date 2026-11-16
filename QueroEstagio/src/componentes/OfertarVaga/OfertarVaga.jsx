@@ -41,7 +41,7 @@ export default function OfertarVaga() {
         <div className="brand"><div className="logo-square">Q.E</div><div><div>Q.E. – Quero Estágio</div><div>Instituto Federal do Amapá — Campus Laranjal do Jari</div></div></div>
         <button className="menu-btn" onClick={() => setMenuAberto(!menuAberto)} aria-expanded={menuAberto}>☰ Menu</button>
       </header>
-      {menuAberto && <nav className="menu-panel"><a href="/painel-ofertante">Painel</a><a href="/vagas-ofertadas">Estágios Ofertados</a><a href="/ofertante">Sair</a></nav>}
+      {menuAberto && <nav className="menu-panel"><a href="/painel-ofertante">Painel</a><a href="/vagas-ofertadas">Estágios Ofertados</a><a href="/ofertante" onClick={api.logout}>Sair</a></nav>}
       <main className="container">
         <section className="form-card">
           <h1 className="form-title">Cadastrar Estágio</h1>
