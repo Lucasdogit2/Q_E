@@ -23,7 +23,10 @@ router.post('/register', async (req, res) => {
   const { data, error } = await supabaseAuth.auth.signUp({
     email: normalizedEmail,
     password,
-    options: { data: { full_name: full_name.trim() } }
+    options: {
+      data: { full_name: full_name.trim() },
+      emailRedirectTo: (process.env.FRONTEND_URL || 'http://localhost:5173').split(',')[0].trim()
+    }
   });
   if (error) return res.status(400).json({ error: error.message });
   if (!data.user) return res.status(400).json({ error: 'Não foi possível criar a conta.' });
