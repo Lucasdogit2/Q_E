@@ -20,11 +20,14 @@ DECLARE
   v_approved_count integer;
   v_application public.applications;
 BEGIN
-  IF p_status NOT IN ('approved', 'rejected') THEN
+  IF p_status IS NULL OR p_status NOT IN ('approved', 'rejected') THEN
     RAISE EXCEPTION 'Decisão inválida.' USING ERRCODE = 'P0001';
   END IF;
 
-  -- Descobre a vaga associada à inscrição.
+  IF p_application_id IS NULL OR p_staff_id IS NULL THEN
+    RAISE EXCEPTION 'Identificação da solicitação ou do servidor inválida.' USING ERRCODE = 'P0001';
+  END IF;
+
   SELECT internship_id
     INTO v_internship_id
     FROM public.applications
@@ -34,7 +37,7 @@ BEGIN
     RAISE EXCEPTION 'Solicitação não encontrada.' USING ERRCODE = 'P0001';
   END IF;
 
-  -- Serializa todas as decisões referentes à mesma vaga.
+  -- O bloqueio da linha da vaga serializa decisões concorrentes para ela.
   SELECT staff_id, vacancies
     INTO v_internship_staff_id, v_vacancies
     FROM public.internships
@@ -45,11 +48,10 @@ BEGIN
     RAISE EXCEPTION 'Vaga não encontrada.' USING ERRCODE = 'P0001';
   END IF;
 
-  IF v_internship_staff_id <> p_staff_id THEN
+  IF v_internship_staff_id IS DISTINCT FROM p_staff_id THEN
     RAISE EXCEPTION 'Você não é responsável por esta vaga.' USING ERRCODE = 'P0001';
   END IF;
 
-  -- Revalida o estado da inscrição depois de obter o bloqueio da vaga.
   SELECT status
     INTO v_application_status
     FROM public.applications
