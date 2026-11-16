@@ -1,0 +1,54 @@
+name: Verificação da aplicação Q.E.
+
+on:
+  push:
+    branches:
+      - integracao-supabase
+  pull_request:
+    branches:
+      - integracao-supabase
+
+jobs:
+  frontend:
+    name: Frontend React
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: QueroEstagio
+    steps:
+      - name: Baixar código
+        uses: actions/checkout@v4
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: QueroEstagio/package-lock.json
+      - name: Instalar dependências
+        run: npm ci
+      - name: Verificar qualidade do código
+        run: npm run lint
+      - name: Gerar build de produção
+        run: npm run build
+
+  backend:
+    name: Backend Express
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Backend
+    steps:
+      - name: Baixar código
+        uses: actions/checkout@v4
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: Backend/package-lock.json
+      - name: Instalar dependências
+        run: npm ci
+      - name: Verificar sintaxe do servidor e das rotas
+        run: |
+          node --check server.js
+          find src -name '*.js' -print0 | xargs -0 -n1 node --check
