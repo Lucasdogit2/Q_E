@@ -203,8 +203,6 @@ export default function Login() {
                 </div>
 
 
-                <small>Use seu e-mail institucional @aluno.ifap.edu.br.</small>
-
                 {/* SENHA */}
 
                 <div className="field">
@@ -362,6 +360,7 @@ export default function Login() {
 
                 </div>
 
+                <small>O cadastro de estudante aceita somente e-mails institucionais @aluno.ifap.edu.br.</small>
 
                 {/* SENHA */}
 
