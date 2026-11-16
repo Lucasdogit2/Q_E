@@ -99,6 +99,10 @@ router.post('/:id/applications', async (req, res) => {
       status: 'pending',
       message: req.body?.message || null
     }).select().single();
+
+    if (error?.code === '23505') {
+      return res.status(409).json({ error: 'Você já se candidatou a esta vaga.' });
+    }
     if (error) return res.status(400).json({ error: error.message });
     return res.status(201).json({ application: data });
   } catch (error) {
