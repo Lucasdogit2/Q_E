@@ -16,7 +16,7 @@ router.post('/register', async (req, res) => {
   }
 
   const normalizedEmail = email.trim().toLowerCase();
-  if (!/^[^\\s@]+@aluno\\.ifap\\.edu\\.br$/.test(normalizedEmail)) {
+  if (!/^[^\s@]+@aluno\.ifap\.edu\.br$/.test(normalizedEmail)) {
     return res.status(400).json({ error: 'O cadastro de estudante aceita somente e-mails institucionais @aluno.ifap.edu.br.' });
   }
 
