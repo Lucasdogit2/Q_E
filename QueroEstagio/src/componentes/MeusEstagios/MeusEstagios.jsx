@@ -21,7 +21,7 @@ export default function MeusEstagios() {
   return <div className="meus-estagios-body">
     <header><div className="brand" onClick={() => navigate('/painel')} style={{ cursor: 'pointer' }}><div className="logo-square">Q.E</div><div>Q.E. – Quero Estágio<div style={{ fontSize: '0.78rem' }}>Instituto Federal do Amapá — Campus Laranjal do Jari</div></div></div>
       <button className="menu-btn" onClick={() => setMenuAberto(!menuAberto)} aria-expanded={menuAberto}>☰ Menu</button></header>
-    {menuAberto && <nav className="menu-panel"><a href="/painel">Painel Inicial</a><a href="/buscar">Buscar Estágios</a><a href="/">Sair</a></nav>}
+    {menuAberto && <nav className="menu-panel"><a href="/painel">Painel Inicial</a><a href="/buscar">Buscar Estágios</a><a href="/" onClick={api.logout}>Sair</a></nav>}
     <main><h2>Meus Pedidos de Estágio</h2>
       {loading && <p>Carregando suas candidaturas...</p>}
       {erro && <p role="alert">{erro}</p>}
