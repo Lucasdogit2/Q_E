@@ -71,6 +71,21 @@ router.patch('/:id/decision', async (req, res) => {
   if (application.internship.staff_id !== staff.id) return res.status(403).json({ error: 'Você não é responsável por esta vaga.' });
   if (application.status !== 'pending') return res.status(409).json({ error: 'Esta solicitação já foi analisada.' });
 
+  if (status === 'approved') {
+    const { data: internship, error: internshipError } = await supabaseAdmin
+      .from('internships').select('vacancies').eq('id', application.internship_id).single();
+    if (internshipError) return res.status(500).json({ error: internshipError.message });
+
+    const { count, error: countError } = await supabaseAdmin.from('applications')
+      .select('id', { count: 'exact', head: true })
+      .eq('internship_id', application.internship_id)
+      .eq('status', 'approved');
+    if (countError) return res.status(500).json({ error: countError.message });
+    if ((count || 0) >= internship.vacancies) {
+      return res.status(409).json({ error: 'Todas as vagas desta oportunidade já foram preenchidas.' });
+    }
+  }
+
   const { data, error } = await supabaseAdmin.from('applications')
     .update({ status, decided_at: new Date().toISOString() })
     .eq('id', req.params.id).eq('status', 'pending').select().maybeSingle();
