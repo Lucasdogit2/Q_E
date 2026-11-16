@@ -1,91 +1,46 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './BuscarEstagios.css'; // Importação corrigida aqui!
+import { api } from '../../services/api';
+import './BuscarEstagios.css';
 
 export default function BuscarEstagios() {
   const [menuAberto, setMenuAberto] = useState(false);
+  const [vagas, setVagas] = useState([]);
+  const [busca, setBusca] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [erro, setErro] = useState('');
   const navigate = useNavigate();
 
-  const estagios = [
-    { id: 1, titulo: 'Estágio em Programação', habilidades: 'Java, Python, Git' },
-    { id: 2, titulo: 'Estágio em Design Gráfico', habilidades: 'Photoshop, Illustrator, Criatividade' },
-    { id: 3, titulo: 'Estágio em Marketing Digital', habilidades: 'SEO, Redes Sociais, Copywriting' },
-    { id: 4, titulo: 'Estágio em Engenharia', habilidades: 'AutoCAD, SolidWorks, Análise Técnica' }
-  ];
+  useEffect(() => {
+    api.internships()
+      .then(result => setVagas(result.internships || []))
+      .catch(error => setErro(error.message))
+      .finally(() => setLoading(false));
+  }, []);
 
-  // Altere essa função dentro do BuscarEstagios.jsx
-  const handleAcessarVaga = (id) => {
-    navigate('/detalhes'); // Agora o botão "Acessar" leva para o formulário!
-  };
+  const filtradas = vagas.filter(v => [v.title, v.area, v.location, v.description].join(' ').toLowerCase().includes(busca.toLowerCase()));
 
   return (
     <div className="buscar-body">
       <header>
-        <div className="brand" onClick={() => navigate('/painel')} style={{ cursor: 'pointer' }}>
-          <div className="logo-square">Q.E</div>
-          <div>
-            <div>Q.E. – Quero Estágio</div>
-            <div style={{ fontSize: '0.78rem', color: 'rgba(255,255,255,0.9)' }}>
-              Instituto Federal do Amapá — Campus Laranjal do Jari
-            </div>
-          </div>
-        </div>
-        <button 
-          className="menu-btn" 
-          onClick={() => setMenuAberto(!menuAberto)}
-          aria-expanded={menuAberto}
-        >
-          ☰ Menu
-        </button>
+        <div className="brand" onClick={() => navigate('/painel')} style={{ cursor: 'pointer' }}><div className="logo-square">Q.E</div><div><div>Q.E. – Quero Estágio</div><div style={{ fontSize: '0.78rem' }}>Instituto Federal do Amapá — Campus Laranjal do Jari</div></div></div>
+        <button className="menu-btn" onClick={() => setMenuAberto(!menuAberto)} aria-expanded={menuAberto}>☰ Menu</button>
       </header>
-
-      {menuAberto && (
-        <nav className="menu-panel">
-          <a href="#" onClick={() => { setMenuAberto(false); navigate('/painel'); }}>Painel Inicial</a>
-          <a href="#" onClick={() => setMenuAberto(false)}>Meus Estágios</a>
-          <a href="#" onClick={() => navigate('/')}>Sair</a>
-        </nav>
-      )}
-
+      {menuAberto && <nav className="menu-panel"><a href="/painel">Painel Inicial</a><a href="/meus-estagios">Meus Estágios</a><a href="/">Sair</a></nav>}
       <main>
-        <h2 style={{ textAlign: 'center', color: 'var(--azul-petroleo)', marginBottom: '30px' }}>
-          Buscar Estágios
-        </h2>
-
-        <div className="filters">
-          <select className="tipo">
-            <option value="interno">Interno</option>
-            <option value="externo">Externo</option>
-          </select>
-          <input type="text" placeholder="Nome do estágio" />
-          <input type="text" placeholder="Habilidades" />
-          <input type="text" placeholder="Local" />
-          <button onClick={() => alert('Filtrando oportunidades...')}>Filtrar</button>
-        </div>
-
+        <h2 style={{ textAlign: 'center', color: 'var(--azul-petroleo)', marginBottom: '30px' }}>Buscar Estágios</h2>
+        <div className="filters"><input type="search" placeholder="Buscar por título, área ou local" value={busca} onChange={e => setBusca(e.target.value)} /></div>
+        {loading && <p>Carregando oportunidades...</p>}
+        {erro && <p role="alert">{erro}</p>}
+        {!loading && !erro && filtradas.length === 0 && <p>Nenhuma vaga aberta encontrada.</p>}
         <div className="cards">
-          {estagios.map((vaga) => (
-            <div className="card" key={vaga.id} onClick={() => handleAcessarVaga(vaga.id)}>
-              <img src="https://via.placeholder.com/300x150" alt={vaga.titulo} />
-              <div className="card-content">
-                <div>
-                  <h3>{vaga.titulo}</h3>
-                  <p>Habilidades necessárias: {vaga.habilidades}</p>
-                </div>
-                <button onClick={(e) => { e.stopPropagation(); handleAcessarVaga(vaga.id); }}>
-                  Acessar
-                </button>
-              </div>
-            </div>
-          ))}
+          {filtradas.map(vaga => <div className="card" key={vaga.id}>
+            <div className="card-content"><div><h3>{vaga.title}</h3><p>{vaga.description}</p><p><strong>Área:</strong> {vaga.area} · <strong>Local:</strong> {vaga.location}</p><p><strong>Carga horária:</strong> {vaga.required_hours}h · <strong>Vagas:</strong> {vaga.vacancies}</p><p>{vaga.start_date} até {vaga.end_date}</p></div>
+            <button onClick={() => navigate('/detalhes', { state: { internship: vaga } })}>Candidatar-se</button></div>
+          </div>)}
         </div>
       </main>
-
-      <footer>
-        Plataforma Q.E. – Quero Estágio | Vinculada ao Instituto Federal do Amapá – Campus Laranjal do Jari
-        <small>©️ 2025 – Todos os direitos reservados</small>
-        <div className="mascot">🐢</div>
-      </footer>
+      <footer>Plataforma Q.E. – Quero Estágio | IFAP – Campus Laranjal do Jari</footer>
     </div>
   );
 }
