@@ -203,6 +203,8 @@ export default function Login() {
                 </div>
 
 
+                <small>Use seu e-mail institucional @aluno.ifap.edu.br.</small>
+
                 {/* SENHA */}
 
                 <div className="field">
@@ -351,7 +353,8 @@ export default function Login() {
                   <input
                     id="email"
                     type="email"
-                    placeholder="Digite seu e-mail"
+                    autoComplete="email"
+                    placeholder="seu.email@aluno.ifap.edu.br"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
