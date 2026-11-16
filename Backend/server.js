@@ -5,6 +5,7 @@ import { supabaseAdmin } from './src/config/supabase.js';
 import authRoutes from './src/routes/auth.routes.js';
 import internshipsRoutes from './src/routes/internships.routes.js';
 import applicationsRoutes from './src/routes/applications.routes.js';
+import attendanceRoutes from './src/routes/attendance.routes.js';
 
 dotenv.config();
 
@@ -32,6 +33,7 @@ app.get('/api/teste-banco', async (_req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/internships', internshipsRoutes);
 app.use('/api/applications', applicationsRoutes);
+app.use('/api/attendance', attendanceRoutes);
 
 app.use((err, _req, res, _next) => {
   console.error(err);
