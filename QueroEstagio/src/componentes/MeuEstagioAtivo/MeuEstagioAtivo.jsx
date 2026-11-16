@@ -18,7 +18,7 @@ export default function MeuEstagioAtivo() {
   return <div className="estagio-ativo-body">
     <header><div className="brand" onClick={() => navigate('/painel')} style={{ cursor: 'pointer' }}><div className="logo-square">Q.E</div><div>Q.E. – Quero Estágio<div style={{ fontSize: '0.78rem' }}>Instituto Federal do Amapá — Campus Laranjal do Jari</div></div></div>
       <button className="menu-btn" onClick={() => setMenuAberto(!menuAberto)}>☰ Menu</button></header>
-    {menuAberto && <nav className="menu-panel"><a href="/painel">Painel Inicial</a><a href="/meus-estagios">Meus Estágios</a><a href="/">Sair</a></nav>}
+    {menuAberto && <nav className="menu-panel"><a href="/painel">Painel Inicial</a><a href="/meus-estagios">Meus Estágios</a><a href="/" onClick={api.logout}>Sair</a></nav>}
     <main className="estagio-ativo-main"><h2>Progresso dos Estágios Aprovados</h2>
       {loading && <p>Carregando progresso...</p>}{erro && <p role="alert">{erro}</p>}
       {!loading && !erro && progress.length === 0 && <p>Você ainda não possui estágio aprovado com progresso registrado.</p>}
