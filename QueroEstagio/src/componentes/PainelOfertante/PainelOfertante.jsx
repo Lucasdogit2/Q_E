@@ -8,7 +8,9 @@ export default function PainelOfertante() {
   const navigate = useNavigate();
 
   const handleSair = () => {
-    navigate('/ofertante'); // Redireciona de volta para o login do Ofertante
+    localStorage.removeItem('qe_access_token');
+    localStorage.removeItem('qe_user');
+    navigate('/ofertante');
   };
 
   return (
