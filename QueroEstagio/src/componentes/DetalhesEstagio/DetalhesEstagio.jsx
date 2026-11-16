@@ -33,7 +33,7 @@ export default function DetalhesEstagio() {
   return <div className="detalhes-body">
     <header><div className="brand" onClick={() => navigate('/painel')} style={{ cursor: 'pointer' }}><div className="logo-square">Q.E</div><div>Q.E. – Quero Estágio<div style={{ fontSize: '0.78rem' }}>Instituto Federal do Amapá — Campus Laranjal do Jari</div></div></div>
       <button className="menu-btn" onClick={() => setMenuAberto(!menuAberto)}>☰ Menu</button></header>
-    {menuAberto && <nav className="menu-panel"><a href="/painel">Painel Inicial</a><a href="/buscar">Buscar Estágios</a><a href="/">Sair</a></nav>}
+    {menuAberto && <nav className="menu-panel"><a href="/painel">Painel Inicial</a><a href="/buscar">Buscar Estágios</a><a href="/" onClick={api.logout}>Sair</a></nav>}
     <main className="detalhes-container">
       <h2>Enviar Pedido de Estágio</h2>
       {internship ? <section><h3>{internship.title}</h3><p>{internship.description}</p><p><strong>Área:</strong> {internship.area} · <strong>Local:</strong> {internship.location}</p><p><strong>Carga horária:</strong> {internship.required_hours}h</p></section> : <p>Vaga não selecionada. Volte à busca de estágios.</p>}
