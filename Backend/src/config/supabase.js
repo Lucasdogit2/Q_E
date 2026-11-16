@@ -1,16 +1,15 @@
 import { createClient } from '@supabase/supabase-js';
 import dotenv from 'dotenv';
 
-// Carrega as variáveis do arquivo .env
 dotenv.config();
 
 const supabaseUrl = process.env.SUPABASE_URL;
-const supabaseKey = process.env.SUPABASE_KEY;
+const supabaseAnonKey = process.env.SUPABASE_ANON_KEY;
 
-// Trava de segurança para avisar se esqueceu do .env
-if (!supabaseUrl || !supabaseKey) {
-  console.error('❌ ERRO: SUPABASE_URL e SUPABASE_KEY não foram encontradas no arquivo .env!');
+if (!supabaseUrl || !supabaseAnonKey) {
+  throw new Error(
+    'Configure SUPABASE_URL e SUPABASE_ANON_KEY no arquivo Backend/.env antes de iniciar o servidor.'
+  );
 }
 
-// Cria e exporta o cliente conectado do Supabase
-export const supabase = createClient(supabaseUrl, supabaseKey);
+export const supabase = createClient(supabaseUrl, supabaseAnonKey);
