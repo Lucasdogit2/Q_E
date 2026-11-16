@@ -192,8 +192,9 @@ export default function Login() {
 
                   <input
                     id="matricula"
-                    type="text"
-                    placeholder="Digite seu Email"
+                    type="email"
+                    autoComplete="username"
+                    placeholder="Digite seu e-mail"
                     value={matricula}
                     onChange={(e) => setMatricula(e.target.value)}
                     required
@@ -229,6 +230,7 @@ export default function Login() {
                   <button
                     type="submit"
                     className="btn-primary"
+                    disabled={carregando}
                   >
                     {carregando ? 'Aguarde...' : 'Entrar'}
                   </button>
