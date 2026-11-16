@@ -53,9 +53,9 @@ router.post('/', async (req, res) => {
   if (!title?.trim() || !description?.trim() || !start_date || !end_date || !location?.trim() || !area?.trim()) {
     return res.status(400).json({ error: 'Preencha título, descrição, datas, local e área.' });
   }
-  if (!Number.isFinite(Number(required_hours)) || Number(required_hours) <= 0 ||
+  if (!Number.isInteger(Number(required_hours)) || Number(required_hours) <= 0 ||
       !Number.isInteger(Number(vacancies)) || Number(vacancies) <= 0 || end_date < start_date) {
-    return res.status(400).json({ error: 'Confira carga horária, quantidade de vagas e período.' });
+    return res.status(400).json({ error: 'A carga horária e a quantidade de vagas devem ser números inteiros positivos, e o período deve ser válido.' });
   }
   try {
     const staffId = await getStaffId(req.profile.id);
