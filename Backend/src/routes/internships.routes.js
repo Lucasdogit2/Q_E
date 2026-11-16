@@ -5,6 +5,12 @@ import { requireAuth } from '../middleware/auth.js';
 const router = Router();
 router.use(requireAuth);
 
+function isValidDateOnly(value) {
+  if (typeof value !== 'string' || !/^\\d{4}-\\d{2}-\\d{2}$/.test(value)) return false;
+  const date = new Date(`${value}T00:00:00.000Z`);
+  return !Number.isNaN(date.getTime()) && date.toISOString().slice(0, 10) === value;
+}
+
 async function getStudentId(profileId) {
   const { data, error } = await supabaseAdmin.from('students').select('id').eq('profile_id', profileId).maybeSingle();
   if (error) throw error;
@@ -54,7 +60,8 @@ router.post('/', async (req, res) => {
     return res.status(400).json({ error: 'Preencha título, descrição, datas, local e área.' });
   }
   if (!Number.isInteger(Number(required_hours)) || Number(required_hours) <= 0 ||
-      !Number.isInteger(Number(vacancies)) || Number(vacancies) <= 0 || end_date < start_date) {
+      !Number.isInteger(Number(vacancies)) || Number(vacancies) <= 0 ||
+      !isValidDateOnly(start_date) || !isValidDateOnly(end_date) || end_date < start_date) {
     return res.status(400).json({ error: 'A carga horária e a quantidade de vagas devem ser números inteiros positivos, e o período deve ser válido.' });
   }
   try {
