@@ -3,12 +3,20 @@ import { useNavigate } from 'react-router-dom';
 import { api } from '../../services/api';
 import './DetalhesEstagioOfertante.css';
 
+function getLocalDate() {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
 export default function DetalhesEstagioOfertante() {
   const [menuAberto, setMenuAberto] = useState(false);
   const [applications, setApplications] = useState([]);
   const [selectedId, setSelectedId] = useState('');
   const [attendance, setAttendance] = useState([]);
-  const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
+  const [date, setDate] = useState(getLocalDate());
   const [status, setStatus] = useState('present');
   const [hours, setHours] = useState('4');
   const [notes, setNotes] = useState('');
@@ -58,7 +66,7 @@ export default function DetalhesEstagioOfertante() {
   return <div className="login-wrapper detalhes-ofertante-root">
     <header className="topbar"><div className="brand"><div className="logo-square">Q.E</div><div><div>Q.E. – Quero Estágio</div><div className="ifap-text">Instituto Federal do Amapá — Campus Laranjal do Jari</div></div></div>
       <button className="menu-btn" onClick={() => setMenuAberto(!menuAberto)}>☰ Menu</button></header>
-    {menuAberto && <nav className="menu-panel"><a href="/painel-ofertante">Painel</a><a href="/vagas-ofertadas">Voltar</a><a href="/ofertante">Sair</a></nav>}
+    {menuAberto && <nav className="menu-panel"><a href="/painel-ofertante">Painel</a><a href="/vagas-ofertadas">Voltar</a><a href="/ofertante" onClick={api.logout}>Sair</a></nav>}
     <main className="container">
       <h1>Frequência dos Estagiários</h1>
       {loading && <p>Carregando estagiários...</p>}
@@ -75,7 +83,7 @@ export default function DetalhesEstagioOfertante() {
           <form onSubmit={salvar}>
             <div className="field"><label htmlFor="attendanceDate">Data</label><input id="attendanceDate" type="date" value={date} onChange={e => setDate(e.target.value)} required /></div>
             <div className="field"><label htmlFor="attendanceStatus">Situação</label><select id="attendanceStatus" value={status} onChange={e => setStatus(e.target.value)}><option value="present">Presente</option><option value="absent">Ausente</option></select></div>
-            <div className="field"><label htmlFor="hoursWorked">Horas trabalhadas</label><input id="hoursWorked" type="number" min="0" step="0.25" value={status === 'absent' ? 0 : hours} disabled={status === 'absent'} onChange={e => setHours(e.target.value)} /></div>
+            <div className="field"><label htmlFor="hoursWorked">Horas trabalhadas</label><input id="hoursWorked" type="number" min="0" step="0.25" required value={status === 'absent' ? 0 : hours} disabled={status === 'absent'} onChange={e => setHours(e.target.value)} /></div>
             <div className="field"><label htmlFor="attendanceNotes">Observações</label><textarea id="attendanceNotes" value={notes} onChange={e => setNotes(e.target.value)} /></div>
             <button type="submit" disabled={saving}>{saving ? 'Salvando...' : 'Salvar frequência'}</button>
           </form>
