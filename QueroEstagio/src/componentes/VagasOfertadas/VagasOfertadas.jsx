@@ -27,7 +27,7 @@ export default function VagasOfertadas() {
         <p>{v.description}</p><p><strong>Área:</strong> {v.area} · <strong>Local:</strong> {v.location}</p>
         <p><strong>Carga:</strong> {v.required_hours}h · <strong>Vagas:</strong> {v.vacancies}</p>
         <p>{v.start_date} até {v.end_date}</p>
-        <div className="card-actions"><button className="btn-action btn-access" onClick={() => navigate('/pedidos-ofertante')}>Ver solicitações</button></div>
+        <div className="card-actions"><button className="btn-action btn-access" onClick={() => navigate('/pedidos-ofertante')}>Ver solicitações</button><button className="btn-action btn-orders" onClick={() => navigate('/detalhes-ofertante')}>Registrar frequência</button></div>
       </div>)}</div>
     </main><footer className="bottombar">Plataforma Q.E. – Quero Estágio | IFAP – Campus Laranjal do Jari</footer>
   </div>;
