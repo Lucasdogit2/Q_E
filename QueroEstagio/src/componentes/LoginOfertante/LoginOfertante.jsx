@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './LoginOfertante.css';
+import { api } from '../../services/api';
 
 export default function LoginOfertante() {
   const navigate = useNavigate();
@@ -27,114 +28,24 @@ export default function LoginOfertante() {
     navigate('/');
   };
 
-  // Login do ofertante
-  const handleLogin = (e) => {
+  // Acesso somente para contas staff previamente provisionadas.
+  const handleLogin = async (e) => {
     e.preventDefault();
-
-    if (
-      identificador.trim() === '' ||
-      senha === ''
-    ) {
-      alert('Preencha o e-mail e a senha!');
-      return;
+    try {
+      const result = await api.login({ email: identificador, password: senha });
+      if (result.user.role !== 'staff') {
+        throw new Error('Esta conta não possui permissão de ofertante.');
+      }
+      localStorage.setItem('qe_access_token', result.access_token);
+      localStorage.setItem('qe_user', JSON.stringify(result.user));
+      navigate('/painel-ofertante');
+    } catch (error) {
+      alert(error.message);
     }
-
-    // Recupera os ofertantes cadastrados
-    const ofertantes = JSON.parse(
-      localStorage.getItem('ofertantes') || '[]'
-    );
-
-    // Procura uma conta com o e-mail e a senha informados
-    const ofertanteEncontrado = ofertantes.find(
-      (ofertante) =>
-        ofertante.email.toLowerCase() ===
-          identificador.trim().toLowerCase() &&
-        ofertante.senha === senha
-    );
-
-    if (!ofertanteEncontrado) {
-      alert('E-mail ou senha incorretos. Verifique seus dados.');
-      return;
-    }
-
-    // Guarda o ofertante que entrou
-    localStorage.setItem(
-      'ofertanteLogado',
-      JSON.stringify({
-        nome: ofertanteEncontrado.nome,
-        email: ofertanteEncontrado.email
-      })
-    );
-
-    navigate('/painel-ofertante');
   };
 
-  // Cadastro do ofertante
-  const handleCadastro = (e) => {
-    e.preventDefault();
+  const handleEstudanteClick = () => navigate('/');
 
-    if (
-      nome.trim() === '' ||
-      email.trim() === '' ||
-      novaSenha === '' ||
-      confirmarSenha === ''
-    ) {
-      alert('Preencha todos os campos!');
-      return;
-    }
-
-    if (novaSenha !== confirmarSenha) {
-      alert('As senhas não coincidem!');
-      return;
-    }
-
-    const emailNormalizado = email.trim().toLowerCase();
-
-    // Recupera a lista existente
-    const ofertantes = JSON.parse(
-      localStorage.getItem('ofertantes') || '[]'
-    );
-
-    // Impede cadastrar o mesmo e-mail duas vezes
-    const emailExiste = ofertantes.some(
-      (ofertante) =>
-        ofertante.email.toLowerCase() === emailNormalizado
-    );
-
-    if (emailExiste) {
-      alert('Já existe um cadastro com esse e-mail!');
-      return;
-    }
-
-    // Monta o novo cadastro
-    const novoOfertante = {
-      id: Date.now(),
-      nome: nome.trim(),
-      email: emailNormalizado,
-      senha: novaSenha
-    };
-
-    // Adiciona à lista sem apagar os outros cadastros
-    ofertantes.push(novoOfertante);
-
-    localStorage.setItem(
-      'ofertantes',
-      JSON.stringify(ofertantes)
-    );
-
-    alert('Cadastro realizado com sucesso! Agora faça seu login.');
-
-    // Preenche o e-mail no login e limpa os outros campos
-    setIdentificador(emailNormalizado);
-    setSenha('');
-    setNome('');
-    setEmail('');
-    setNovaSenha('');
-    setConfirmarSenha('');
-
-    // Volta para o login
-    setModoCadastro(false);
-  };
 
   return (
     <div className="login-wrapper tela-ofertante">
@@ -268,20 +179,12 @@ export default function LoginOfertante() {
                 </div>
 
                 <p className="cadastro-pergunta">
-                  Sua empresa ou setor ainda não possui cadastro?
+                  O acesso de ofertante é liberado pela administração da plataforma.
                 </p>
 
-                <button
-                  type="button"
-                  className="btn-cadastrarr"
-                  onClick={() => setModoCadastro(true)}
-                >
-                  Cadastrar ofertante
-                </button>
-
                 <p className="alt-note">
-                  Cadastre sua empresa ou setor para acessar a área
-                  de gerenciamento de estágios.
+                  Solicite à coordenação responsável a criação ou liberação
+                  da sua conta de servidor/ofertante.
                 </p>
               </form>
             </>
