@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Login.css';
+import { api } from '../../services/api';
 
 export default function Login() {
 
@@ -19,16 +20,27 @@ export default function Login() {
   const [email, setEmail] = useState('');
   const [novaSenha, setNovaSenha] = useState('');
   const [confirmarSenha, setConfirmarSenha] = useState('');
+  const [curso, setCurso] = useState('');
+  const [anoAcademico, setAnoAcademico] = useState('');
+  const [carregando, setCarregando] = useState(false);
 
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-
-    if (matricula.trim() !== '' && senha.trim() !== '') {
+    setCarregando(true);
+    try {
+      const result = await api.login({ email: matricula, password: senha });
+      if (result.user.role !== 'student') {
+        throw new Error('Esta conta não é de estudante. Use o acesso de servidor.');
+      }
+      localStorage.setItem('qe_access_token', result.access_token);
+      localStorage.setItem('qe_user', JSON.stringify(result.user));
       navigate('/painel');
-    } else {
-      alert('Por favor, preencha a matrícula e a senha!');
+    } catch (error) {
+      alert(error.message);
+    } finally {
+      setCarregando(false);
     }
   };
 
@@ -39,45 +51,36 @@ export default function Login() {
 
 
 
-  const handleCadastro = (e) => {
+  const handleCadastro = async (e) => {
     e.preventDefault();
-
-    if (
-      nome.trim() === '' ||
-      novaMatricula.trim() === '' ||
-      email.trim() === '' ||
-      novaSenha.trim() === '' ||
-      confirmarSenha.trim() === ''
-    ) {
-      alert('Por favor, preencha todos os campos!');
-      return;
-    }
-
     if (novaSenha !== confirmarSenha) {
       alert('As senhas não coincidem!');
       return;
     }
-
-    const usuario = {
-      nome: nome,
-      matricula: novaMatricula,
-      email: email,
-      senha: novaSenha
-    };
-
-    localStorage.setItem('usuario', JSON.stringify(usuario));
-
-    alert('Usuário cadastrado com sucesso!');
-
-    // Limpar campos
-    setNome('');
-    setNovaMatricula('');
-    setEmail('');
-    setNovaSenha('');
-    setConfirmarSenha('');
-
-    // Voltar para login
-    setModoCadastro(false);
+    setCarregando(true);
+    try {
+      const result = await api.register({
+        full_name: nome,
+        email,
+        password: novaSenha,
+        registration: novaMatricula,
+        course: curso,
+        academic_year: Number(anoAcademico)
+      });
+      alert(result.message || 'Cadastro realizado com sucesso!');
+      setNome('');
+      setNovaMatricula('');
+      setEmail('');
+      setNovaSenha('');
+      setConfirmarSenha('');
+      setCurso('');
+      setAnoAcademico('');
+      setModoCadastro(false);
+    } catch (error) {
+      alert(error.message);
+    } finally {
+      setCarregando(false);
+    }
   };
 
 
@@ -227,7 +230,7 @@ export default function Login() {
                     type="submit"
                     className="btn-primary"
                   >
-                    Entrar
+                    {carregando ? 'Aguarde...' : 'Entrar'}
                   </button>
 
 
@@ -259,8 +262,7 @@ export default function Login() {
 
 
                 <p className="alt-note">
-                  Ao entrar, você será redirecionado para autenticação via SUAP.
-                  Caso não tenha credenciais, procure a secretaria do seu curso.
+                  Entre com seu e-mail e senha cadastrados na plataforma Q.E.
                 </p>
 
               </form>
@@ -325,6 +327,16 @@ export default function Login() {
 
                 </div>
 
+
+                <div className="field">
+                  <label htmlFor="curso">Curso</label>
+                  <input id="curso" type="text" placeholder="Digite seu curso" value={curso} onChange={(e) => setCurso(e.target.value)} required />
+                </div>
+
+                <div className="field">
+                  <label htmlFor="anoAcademico">Ano/período acadêmico</label>
+                  <input id="anoAcademico" type="number" min="1" placeholder="Ex.: 2026" value={anoAcademico} onChange={(e) => setAnoAcademico(e.target.value)} required />
+                </div>
 
                 {/* EMAIL */}
 
@@ -391,7 +403,7 @@ export default function Login() {
                 <button
                   type="submit"
              className="btn-cadastrar-estudante">
-  Cadastrar
+  {carregando ? 'Cadastrando...' : 'Cadastrar'}
 </button>
 
                 {/* VOLTAR */}
