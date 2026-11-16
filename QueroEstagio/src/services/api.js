@@ -1,21 +1,40 @@
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
+const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:3000/api').replace(/\/$/, '');
 
 function getToken() {
   return localStorage.getItem('qe_access_token');
 }
 
 async function request(path, options = {}) {
-  const token = getToken();
-  const response = await fetch(`${API_URL}${path}`, {
-    ...options,
-    headers: {
-      'Content-Type': 'application/json',
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      ...(options.headers || {})
+  let response;
+
+  try {
+    const token = getToken();
+    response = await fetch(`${API_URL}${path}`, {
+      ...options,
+      headers: {
+        'Content-Type': 'application/json',
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        ...(options.headers || {})
+      }
+    });
+  } catch {
+    throw new Error('Não foi possível conectar à API Q.E. Verifique se o backend está em execução e se VITE_API_URL está correto.');
+  }
+
+  const responseText = await response.text();
+  let payload = {};
+  if (responseText) {
+    try {
+      payload = JSON.parse(responseText);
+    } catch {
+      payload = {};
     }
-  });
-  const payload = await response.json().catch(() => ({}));
-  if (!response.ok) throw new Error(payload.error || 'Falha na comunicação com o servidor.');
+  }
+
+  if (!response.ok) {
+    throw new Error(payload.error || payload.detalhe || `Falha na comunicação com o servidor (HTTP ${response.status}).`);
+  }
+
   return payload;
 }
 
