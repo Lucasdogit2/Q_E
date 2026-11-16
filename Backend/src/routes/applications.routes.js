@@ -55,6 +55,8 @@ router.get('/approved', async (req, res) => {
   return res.json({ applications: data });
 });
 
+// A decisão é executada no PostgreSQL em uma única transação.
+// A função bloqueia a vaga antes de contar aprovações, evitando exceder vacancies.
 router.patch('/:id/decision', async (req, res) => {
   if (req.profile.role !== 'staff') return res.status(403).json({ error: 'Apenas servidores podem decidir solicitações.' });
   const { status } = req.body || {};
@@ -64,33 +66,23 @@ router.patch('/:id/decision', async (req, res) => {
     .from('staff').select('id').eq('profile_id', req.profile.id).maybeSingle();
   if (staffError || !staff) return res.status(403).json({ error: 'Cadastro de servidor não encontrado.' });
 
-  const { data: application, error: appError } = await supabaseAdmin.from('applications')
-    .select('id, internship_id, status, internship:internships!inner(staff_id)')
-    .eq('id', req.params.id).maybeSingle();
-  if (appError || !application) return res.status(404).json({ error: 'Solicitação não encontrada.' });
-  if (application.internship.staff_id !== staff.id) return res.status(403).json({ error: 'Você não é responsável por esta vaga.' });
-  if (application.status !== 'pending') return res.status(409).json({ error: 'Esta solicitação já foi analisada.' });
+  const { data, error } = await supabaseAdmin.rpc('decide_application', {
+    p_application_id: req.params.id,
+    p_staff_id: staff.id,
+    p_status: status
+  });
 
-  if (status === 'approved') {
-    const { data: internship, error: internshipError } = await supabaseAdmin
-      .from('internships').select('vacancies').eq('id', application.internship_id).single();
-    if (internshipError) return res.status(500).json({ error: internshipError.message });
-
-    const { count, error: countError } = await supabaseAdmin.from('applications')
-      .select('id', { count: 'exact', head: true })
-      .eq('internship_id', application.internship_id)
-      .eq('status', 'approved');
-    if (countError) return res.status(500).json({ error: countError.message });
-    if ((count || 0) >= internship.vacancies) {
-      return res.status(409).json({ error: 'Todas as vagas desta oportunidade já foram preenchidas.' });
+  if (error) {
+    const message = error.message || 'Não foi possível decidir esta solicitação.';
+    if (message.includes('não encontrada')) return res.status(404).json({ error: message });
+    if (message.includes('não é responsável')) return res.status(403).json({ error: message });
+    if (message.includes('já foi analisada') || message.includes('Todas as vagas')) {
+      return res.status(409).json({ error: message });
     }
+    if (error.code === '22P02') return res.status(400).json({ error: 'Identificador da solicitação inválido.' });
+    return res.status(500).json({ error: message });
   }
 
-  const { data, error } = await supabaseAdmin.from('applications')
-    .update({ status, decided_at: new Date().toISOString() })
-    .eq('id', req.params.id).eq('status', 'pending').select().maybeSingle();
-  if (error) return res.status(400).json({ error: error.message });
-  if (!data) return res.status(409).json({ error: 'A solicitação foi alterada por outro usuário.' });
   return res.json({ application: data });
 });
 
