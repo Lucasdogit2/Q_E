@@ -1,32 +1,37 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import { supabase } from './src/config/supabase.js';
+import { supabaseAdmin } from './src/config/supabase.js';
+import authRoutes from './src/routes/auth.routes.js';
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const allowedOrigins = (process.env.FRONTEND_URL || 'http://localhost:5173')
+  .split(',').map((origin) => origin.trim());
 
-app.use(cors());
+app.use(cors({
+  origin(origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) return callback(null, true);
+    return callback(new Error('Origem não autorizada pelo CORS.'));
+  }
+}));
 app.use(express.json());
 
-// Rota de Teste da Conexão com o Banco
-app.get('/api/teste-banco', async (req, res) => {
-  try {
-    // Tenta fazer um teste simples de consulta
-    const { data, error } = await supabase.from('estudantes').select('id').limit(1);
+app.get('/api/health', (_req, res) => res.json({ status: 'ok', service: 'Q.E. API' }));
 
-    if (error) {
-      return res.status(400).json({ status: 'Erro', detalhe: error.message });
-    }
-
-    return res.json({ status: 'Sucesso!', mensagem: 'Conectado ao Supabase com sucesso!', dados: data });
-  } catch (err) {
-    return res.status(500).json({ status: 'Erro no Servidor', detalhe: err.message });
-  }
+app.get('/api/teste-banco', async (_req, res) => {
+  const { error } = await supabaseAdmin.from('profiles').select('id').limit(1);
+  if (error) return res.status(500).json({ status: 'Erro', detalhe: error.message });
+  return res.json({ status: 'Sucesso', mensagem: 'Express conectado ao Supabase.' });
 });
 
-app.listen(PORT, () => {
-  console.log(` Servidor Express rodando na porta ${PORT}`);
+app.use('/api/auth', authRoutes);
+
+app.use((err, _req, res, _next) => {
+  console.error(err);
+  res.status(500).json({ error: 'Erro interno do servidor.' });
 });
+
+app.listen(PORT, () => console.log(`Q.E. API rodando na porta ${PORT}`));
