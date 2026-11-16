@@ -1,16 +1,19 @@
 import { createClient } from '@supabase/supabase-js';
 import dotenv from 'dotenv';
 
-// Carrega as variáveis do arquivo .env
 dotenv.config();
 
-const supabaseUrl = process.env.SUPABASE_URL;
-const supabaseKey = process.env.SUPABASE_KEY;
-
-// Trava de segurança para avisar se esqueceu do .env
-if (!supabaseUrl || !supabaseKey) {
-  console.error('❌ ERRO: SUPABASE_URL e SUPABASE_KEY não foram encontradas no arquivo .env!');
+const { SUPABASE_URL, SUPABASE_ANON_KEY, SUPABASE_SERVICE_ROLE_KEY } = process.env;
+if (!SUPABASE_URL || !SUPABASE_ANON_KEY || !SUPABASE_SERVICE_ROLE_KEY) {
+  throw new Error('Configure SUPABASE_URL, SUPABASE_ANON_KEY e SUPABASE_SERVICE_ROLE_KEY no Backend/.env.');
 }
 
-// Cria e exporta o cliente conectado do Supabase
-export const supabase = createClient(supabaseUrl, supabaseKey);
+// Cliente de autenticação. A chave pública não é segredo.
+export const supabaseAuth = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+  auth: { autoRefreshToken: false, persistSession: false }
+});
+
+// Cliente administrativo restrito ao servidor; nunca exponha a service role key no React.
+export const supabaseAdmin = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, {
+  auth: { autoRefreshToken: false, persistSession: false }
+});
