@@ -16,6 +16,10 @@ router.post('/register', async (req, res) => {
   }
 
   const normalizedEmail = email.trim().toLowerCase();
+  if (!/^[^\\s@]+@aluno\\.ifap\\.edu\\.br$/.test(normalizedEmail)) {
+    return res.status(400).json({ error: 'O cadastro de estudante aceita somente e-mails institucionais @aluno.ifap.edu.br.' });
+  }
+
   const { data, error } = await supabaseAuth.auth.signUp({
     email: normalizedEmail,
     password,
@@ -23,6 +27,9 @@ router.post('/register', async (req, res) => {
   });
   if (error) return res.status(400).json({ error: error.message });
   if (!data.user) return res.status(400).json({ error: 'Não foi possível criar a conta.' });
+  if (Array.isArray(data.user.identities) && data.user.identities.length === 0) {
+    return res.status(409).json({ error: 'Este e-mail já possui cadastro no sistema de autenticação. Tente entrar ou use a recuperação de senha.' });
+  }
 
   const userId = data.user.id;
   try {
