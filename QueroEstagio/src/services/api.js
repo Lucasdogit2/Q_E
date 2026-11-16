@@ -30,6 +30,7 @@ export const api = {
   apply: (id, message = '') => request(`/internships/${id}/applications`, { method: 'POST', body: JSON.stringify({ message }) }),
   myApplications: () => request('/applications/mine'),
   pendingApplications: () => request('/applications/pending'),
+  approvedApplications: () => request('/applications/approved'),
   decideApplication: (id, status) => request(`/applications/${id}/decision`, { method: 'PATCH', body: JSON.stringify({ status }) }),
   attendance: (applicationId) => request(`/attendance/${applicationId}`),
   saveAttendance: (applicationId, data) => request(`/attendance/${applicationId}`, { method: 'POST', body: JSON.stringify(data) }),
