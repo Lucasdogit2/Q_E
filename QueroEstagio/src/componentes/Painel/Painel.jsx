@@ -20,6 +20,8 @@ export default function Painel() {
 
   // Sair
   const handleLogout = () => {
+    localStorage.removeItem('qe_access_token');
+    localStorage.removeItem('qe_user');
     navigate('/');
   };
 
