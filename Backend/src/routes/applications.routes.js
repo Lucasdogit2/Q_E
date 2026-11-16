@@ -38,6 +38,23 @@ router.get('/pending', async (req, res) => {
   return res.json({ applications: data });
 });
 
+router.get('/approved', async (req, res) => {
+  if (req.profile.role !== 'staff') return res.status(403).json({ error: 'Apenas servidores podem consultar estagiários.' });
+  const { data: staff, error: staffError } = await supabaseAdmin
+    .from('staff').select('id').eq('profile_id', req.profile.id).maybeSingle();
+  if (staffError || !staff) return res.status(403).json({ error: 'Cadastro de servidor não encontrado.' });
+  const { data: internships, error: internshipsError } = await supabaseAdmin
+    .from('internships').select('id, title').eq('staff_id', staff.id);
+  if (internshipsError) return res.status(500).json({ error: internshipsError.message });
+  const ids = (internships || []).map(v => v.id);
+  if (!ids.length) return res.json({ applications: [] });
+  const { data, error } = await supabaseAdmin.from('applications')
+    .select('id, internship_id, status, student:students(id, registration, course, profile:profiles(full_name))')
+    .in('internship_id', ids).eq('status', 'approved');
+  if (error) return res.status(500).json({ error: error.message });
+  return res.json({ applications: data });
+});
+
 router.patch('/:id/decision', async (req, res) => {
   if (req.profile.role !== 'staff') return res.status(403).json({ error: 'Apenas servidores podem decidir solicitações.' });
   const { status } = req.body || {};
