@@ -53,5 +53,9 @@ export const api = {
   decideApplication: (id, status) => request(`/applications/${id}/decision`, { method: 'PATCH', body: JSON.stringify({ status }) }),
   attendance: (applicationId) => request(`/attendance/${applicationId}`),
   saveAttendance: (applicationId, data) => request(`/attendance/${applicationId}`, { method: 'POST', body: JSON.stringify(data) }),
-  myProgress: () => request('/attendance/progress/mine')
+  myProgress: () => request('/attendance/progress/mine'),
+  logout: () => {
+    localStorage.removeItem('qe_access_token');
+    localStorage.removeItem('qe_user');
+  }
 };
