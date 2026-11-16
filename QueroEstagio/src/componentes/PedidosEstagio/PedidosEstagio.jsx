@@ -30,7 +30,7 @@ export default function PedidosEstagio() {
   return <div className="login-wrapper pedidos-ofertante-root">
     <header className="topbar"><div className="brand"><div className="logo-square">Q.E</div><div>Q.E. – Pedidos de Estágio</div></div>
       <button className="menu-btn" onClick={() => setMenuAberto(!menuAberto)}>☰ Menu</button></header>
-    {menuAberto && <nav className="menu-panel"><a href="/painel-ofertante">Painel</a><a href="/vagas-ofertadas">Voltar</a><a href="/ofertante">Sair</a></nav>}
+    {menuAberto && <nav className="menu-panel"><a href="/painel-ofertante">Painel</a><a href="/vagas-ofertadas">Voltar</a><a href="/ofertante" onClick={api.logout}>Sair</a></nav>}
     <main className="container"><h1 className="title">Candidatos Interessados</h1>
       {loading && <p>Carregando solicitações...</p>}{erro && <p role="alert">{erro}</p>}
       {!loading && !erro && pedidos.length === 0 && <p>Não há pedidos pendentes para suas vagas.</p>}
