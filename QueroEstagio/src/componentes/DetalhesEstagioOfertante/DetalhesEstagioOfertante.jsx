@@ -37,7 +37,7 @@ export default function DetalhesEstagioOfertante() {
   }, []);
 
   useEffect(() => {
-    if (!selectedId) { setAttendance([]); return; }
+    if (!selectedId) return;
     api.attendance(selectedId)
       .then(result => setAttendance(result.attendance || []))
       .catch(error => setErro(error.message));
