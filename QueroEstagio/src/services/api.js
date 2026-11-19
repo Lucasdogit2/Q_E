@@ -46,6 +46,7 @@ export const api = {
   internships: () => request('/internships'),
   myInternships: () => request('/internships/mine'),
   createInternship: (data) => request('/internships', { method: 'POST', body: JSON.stringify(data) }),
+  updateInternship: (id, data) => request(`/internships/${id}`, { method: 'PATCH', body: JSON.stringify(data) }),
   apply: (id, message = '') => request(`/internships/${id}/applications`, { method: 'POST', body: JSON.stringify({ message }) }),
   myApplications: () => request('/applications/mine'),
   pendingApplications: () => request('/applications/pending'),
