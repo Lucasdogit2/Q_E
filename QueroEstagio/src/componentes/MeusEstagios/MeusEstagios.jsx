@@ -1,26 +1,35 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { api } from '../../services/api';
 import './MeusEstagios.css';
 
 export default function MeusEstagios() {
   const [menuAberto, setMenuAberto] = useState(false);
+  const [applications, setApplications] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [erro, setErro] = useState('');
   const navigate = useNavigate();
 
-  // Simulação dos dados da tabela de pedidos
-  const pedidos = [
-    { id: 1, nome: 'Estágio em Programação', status: 'Aprovado', classeStatus: 'status-approved' },
-    { id: 2, nome: 'Estágio em Design Gráfico', status: 'Esperando', classeStatus: 'status-pending' },
-    { id: 3, nome: 'Estágio em Marketing Digital', status: 'Reprovado', classeStatus: 'status-rejected' }
-  ];
+  useEffect(() => {
+    api.myApplications()
+      .then(result => setApplications(result.applications || []))
+      .catch(error => setErro(error.message))
+      .finally(() => setLoading(false));
+  }, []);
 
-  // Altere essa função dentro do seu MeusEstagios.jsx
-  const handleAcessarEstagioAprovado = () => {
-    navigate('/meu-estagio-ativo'); // Redireciona o usuário para a página de progresso do estágio!
+  const statusInfo = {
+    pending: { label: 'Em análise', className: 'status-pending' },
+    approved: { label: 'Aprovado', className: 'status-approved' },
+    rejected: { label: 'Não aprovado', className: 'status-rejected' }
+  };
+
+  const sair = () => {
+    api.logout();
+    navigate('/');
   };
 
   return (
     <div className="meus-estagios-body">
-      {/* Header */}
       <header>
         <div className="brand" onClick={() => navigate('/painel')} style={{ cursor: 'pointer' }}>
           <div className="logo-square">Q.E</div>
@@ -31,56 +40,54 @@ export default function MeusEstagios() {
             </div>
           </div>
         </div>
-        <button 
-          className="menu-btn" 
-          onClick={() => setMenuAberto(!menuAberto)}
-          aria-expanded={menuAberto}
-        >
-          ☰ Menu
-        </button>
+        <button className="menu-btn" onClick={() => setMenuAberto(!menuAberto)} aria-expanded={menuAberto}>☰ Menu</button>
       </header>
 
-      {/* Menu lateral condicional */}
       {menuAberto && (
         <nav className="menu-panel">
-          <a href="#" onClick={() => { setMenuAberto(false); navigate('/painel'); }}>Painel Inicial</a>
-          <a href="#" onClick={() => { setMenuAberto(false); navigate('/buscar'); }}>Buscar Estágios</a>
-          <a href="#" onClick={() => navigate('/')}>Sair</a>
+          <a href="/painel" onClick={e => { e.preventDefault(); setMenuAberto(false); navigate('/painel'); }}>Painel Inicial</a>
+          <a href="/buscar" onClick={e => { e.preventDefault(); setMenuAberto(false); navigate('/buscar'); }}>Buscar Estágios</a>
+          <a href="/" onClick={e => { e.preventDefault(); sair(); }}>Sair</a>
         </nav>
       )}
 
-      {/* Conteúdo Principal */}
       <main>
         <h2>Meus Pedidos de Estágio</h2>
+        {loading && <p>Carregando suas candidaturas...</p>}
+        {erro && <p role="alert">{erro}</p>}
+        {!loading && !erro && applications.length === 0 && <p>Você ainda não se candidatou a nenhuma vaga.</p>}
 
         <table className="status-table">
           <thead>
-            <tr>
-              <th>Estágio</th>
-              <th>Status</th>
-            </tr>
+            <tr><th>Estágio</th><th>Data da solicitação</th><th>Status</th><th>Ação</th></tr>
           </thead>
           <tbody>
-            {pedidos.map((pedido) => (
-              <tr key={pedido.id}>
-                <td>{pedido.nome}</td>
-                <td className={pedido.classeStatus}>{pedido.status}</td>
-              </tr>
-            ))}
+            {applications.map(app => {
+              const status = statusInfo[app.status] || { label: app.status, className: '' };
+              return (
+                <tr key={app.id}>
+                  <td>{app.internship?.title || 'Estágio'}</td>
+                  <td>{app.applied_at ? new Date(app.applied_at).toLocaleDateString('pt-BR') : '—'}</td>
+                  <td className={status.className}>{status.label}</td>
+                  <td>{app.status === 'approved' && <button onClick={() => navigate('/meu-estagio-ativo')}>Acessar Meu Estágio</button>}</td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
 
-        {/* Bloco de Destaque para o Estágio Aprovado */}
-        <div className="approved-stage">
-          <h3>Estágio Aprovado: Estágio em Programação</h3>
-          <button onClick={handleAcessarEstagioAprovado}>Acessar Meu Estágio</button>
-        </div>
+        {applications.some(app => app.status === 'approved') && (
+          <div className="approved-stage">
+            <h3>Você possui estágio aprovado</h3>
+            <p>Acompanhe suas horas e o progresso do estágio.</p>
+            <button onClick={() => navigate('/meu-estagio-ativo')}>Acompanhar estágio</button>
+          </div>
+        )}
       </main>
 
-      {/* Footer */}
       <footer>
         Plataforma Q.E. – Quero Estágio | Vinculada ao Instituto Federal do Amapá – Campus Laranjal do Jari
-        <small>©️ 2025 – Todos os direitos reservados</small>
+        <small>© 2026 – Todos os direitos reservados</small>
         <div className="mascot">🐢</div>
       </footer>
     </div>
