@@ -13,95 +13,35 @@ import MeuEstagioAtivo from './componentes/MeuEstagioAtivo/MeuEstagioAtivo';
 import DetalhesEstagioOfertante from './componentes/DetalhesEstagioOfertante/DetalhesEstagioOfertante';
 import PedidosEstagio from './componentes/PedidosEstagio/PedidosEstagio';
 import AprovacaoEstagio from './componentes/AprovacaoEstagio/AprovacaoEstagio';
-
+import AuthGuard from './componentes/AuthGuard/AuthGuard';
 
 function App() {
   return (
     <BrowserRouter>
-
       <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/ofertante" element={<LoginOfertante />} />
 
-        {/* Rotas de Autenticação */}
+        <Route element={<AuthGuard allowedRoles={['student']} />}>
+          <Route path="/painel" element={<Painel />} />
+          <Route path="/buscar" element={<BuscarEstagios />} />
+          <Route path="/detalhes" element={<DetalhesEstagio />} />
+          <Route path="/detalhes-estagio" element={<DetalhesEstagio />} />
+          <Route path="/meus-estagios" element={<MeusEstagios />} />
+          <Route path="/meu-estagio-ativo" element={<MeuEstagioAtivo />} />
+        </Route>
 
-        <Route
-          path="/"
-          element={<Login />}
-        />
-
-        <Route
-          path="/ofertante"
-          element={<LoginOfertante />}
-        />
-
-
-        {/* Painéis Principais */}
-
-        <Route
-          path="/painel"
-          element={<Painel />}
-        />
-
-        <Route
-          path="/painel-ofertante"
-          element={<PainelOfertante />}
-        />
-
-
-        {/* Rotas do Ofertante */}
-
-        <Route
-          path="/ofertar-vaga"
-          element={<OfertarVaga />}
-        />
-
-        <Route
-          path="/vagas-ofertadas"
-          element={<VagasOfertadas />}
-        />
-
-        <Route
-          path="/detalhes-ofertante"
-          element={<DetalhesEstagioOfertante />}
-        />
-
-        <Route
-          path="/pedidos-ofertante"
-          element={<PedidosEstagio />}
-        />
-
-        <Route
-          path="/aprovacao-estagio"
-          element={<AprovacaoEstagio />}
-        />
-
-
-
-        {/* Outras rotas */}
-
-   <Route path="/buscar" element={<BuscarEstagios />} />
-
-  <Route
-  path="/detalhes"
-  element={<DetalhesEstagio />}
-/>
-
-<Route
-  path="/detalhes-estagio"
-  element={<DetalhesEstagio />}
-/>
-        <Route
-          path="/meus-estagios"
-          element={<MeusEstagios />}
-        />
-
-        <Route
-          path="/meu-estagio-ativo"
-          element={<MeuEstagioAtivo />}
-        />
-
+        <Route element={<AuthGuard allowedRoles={['staff']} />}>
+          <Route path="/painel-ofertante" element={<PainelOfertante />} />
+          <Route path="/ofertar-vaga" element={<OfertarVaga />} />
+          <Route path="/vagas-ofertadas" element={<VagasOfertadas />} />
+          <Route path="/detalhes-ofertante" element={<DetalhesEstagioOfertante />} />
+          <Route path="/pedidos-ofertante" element={<PedidosEstagio />} />
+          <Route path="/aprovacao-estagio" element={<AprovacaoEstagio />} />
+        </Route>
       </Routes>
-
     </BrowserRouter>
   );
 }
+
 export default App;
