@@ -86,6 +86,62 @@ router.post('/', async (req, res) => {
   }
 });
 
+// Atualiza os dados ou encerra uma vaga pertencente ao servidor autenticado.
+router.patch('/:id', async (req, res) => {
+  if (req.profile.role !== 'staff') return res.status(403).json({ error: 'Apenas servidores podem alterar suas vagas.' });
+  const { title, description, required_hours, start_date, end_date, vacancies, location, area, status } = req.body || {};
+  if (!title?.trim() || !description?.trim() || !start_date || !end_date || !location?.trim() || !area?.trim()) {
+    return res.status(400).json({ error: 'Preencha título, descrição, datas, local e área.' });
+  }
+  if (!Number.isInteger(Number(required_hours)) || Number(required_hours) <= 0 ||
+      !Number.isInteger(Number(vacancies)) || Number(vacancies) <= 0 ||
+      !isValidDateOnly(start_date) || !isValidDateOnly(end_date) || end_date < start_date) {
+    return res.status(400).json({ error: 'A carga horária e a quantidade de vagas devem ser números inteiros positivos, e o período deve ser válido.' });
+  }
+  if (status !== undefined && !['open', 'closed', 'cancelled'].includes(status)) {
+    return res.status(400).json({ error: 'Status da vaga inválido.' });
+  }
+
+  try {
+    const staffId = await getStaffId(req.profile.id);
+    if (!staffId) return res.status(403).json({ error: 'Cadastro de servidor não encontrado.' });
+
+    const { data: existing, error: existingError } = await supabaseAdmin
+      .from('internships').select('id, staff_id').eq('id', req.params.id).maybeSingle();
+    if (existingError) throw existingError;
+    if (!existing) return res.status(404).json({ error: 'Vaga não encontrada.' });
+    if (existing.staff_id !== staffId) return res.status(403).json({ error: 'Você não administra esta vaga.' });
+
+    const { count, error: countError } = await supabaseAdmin
+      .from('applications').select('id', { count: 'exact', head: true })
+      .eq('internship_id', req.params.id).eq('status', 'approved');
+    if (countError) throw countError;
+    if (Number(vacancies) < (count || 0)) {
+      return res.status(409).json({ error: 'A quantidade de vagas não pode ser menor que o número de estudantes já aprovados.' });
+    }
+
+    const updates = {
+      title: title.trim(),
+      description: description.trim(),
+      required_hours: Number(required_hours),
+      start_date,
+      end_date,
+      vacancies: Number(vacancies),
+      location: location.trim(),
+      area: area.trim()
+    };
+    if (status !== undefined) updates.status = status;
+
+    const { data, error } = await supabaseAdmin.from('internships')
+      .update(updates).eq('id', req.params.id).select().single();
+    if (error) throw error;
+    return res.json({ internship: data });
+  } catch (error) {
+    console.error('Erro ao atualizar vaga:', error);
+    return res.status(500).json({ error: 'Não foi possível atualizar a vaga.' });
+  }
+});
+
 // Inscrição de estudante em uma vaga aberta.
 router.post('/:id/applications', async (req, res) => {
   if (req.profile.role !== 'student') return res.status(403).json({ error: 'Apenas estudantes podem se candidatar.' });
