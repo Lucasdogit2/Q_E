@@ -78,6 +78,24 @@ router.post('/login', async (req, res) => {
   });
 });
 
-router.get('/me', requireAuth, (req, res) => res.json({ user: req.profile }));
+router.get('/me', requireAuth, async (req, res) => {
+  if (req.profile.role === 'student') {
+    const { data: student, error } = await supabaseAdmin
+      .from('students')
+      .select('registration, course, academic_year, competencies')
+      .eq('profile_id', req.profile.id)
+      .maybeSingle();
+    if (error) return res.status(500).json({ error: 'Não foi possível consultar os dados do estudante.' });
+    return res.json({ user: req.profile, student });
+  }
+
+  const { data: staff, error } = await supabaseAdmin
+    .from('staff')
+    .select('sector')
+    .eq('profile_id', req.profile.id)
+    .maybeSingle();
+  if (error) return res.status(500).json({ error: 'Não foi possível consultar os dados do servidor.' });
+  return res.json({ user: req.profile, staff });
+});
 
 export default router;
